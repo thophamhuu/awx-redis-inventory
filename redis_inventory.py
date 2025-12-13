@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import json, os, redis
+import json, redis, os
 r = redis.Redis(host='172.17.196.126', port=6379, db=6, decode_responses=True)
 
 def main():
