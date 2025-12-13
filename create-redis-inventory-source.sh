@@ -53,7 +53,7 @@ fi
 # Tạo script content
 SCRIPT_CONTENT='#!/usr/bin/env python3
 import json, redis, os
-r = redis.Redis(host='\''172.17.196.126'\'', port=6379, db=6, decode_responses=True)
+r = redis.Redis(host='\''172.17.196.126'\'', port=6379, db=1, decode_responses=True)
 hosts = r.smembers('\''ansible:hosts'\'') or []
 inv = {'\''_meta'\'': {'\''hostvars'\'': {}}, '\''all'\'': {'\''hosts'\'': list(hosts)}}
 for h in hosts: inv['\''_meta'\'']['\''hostvars'\''][h] = r.hgetall(f'\''ansible:facts:{h}'\'') or {}

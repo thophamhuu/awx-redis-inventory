@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-import json, redis, os
-r = redis.Redis(host='172.17.196.126', port=6379, db=6, decode_responses=True)
+import json, os, redis
+r = redis.Redis(host='172.17.196.126', port=6379, db=1, decode_responses=True)
 
 def main():
     hosts = r.smembers("ansible:hosts") or []
