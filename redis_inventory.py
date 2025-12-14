@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-import json, os, redis
+import json, os, sys
+
+# Thêm /tmp/redis-packages vào PYTHONPATH nếu có
+if os.path.exists('/tmp/redis-packages'):
+    sys.path.insert(0, '/tmp/redis-packages')
+
+import redis
 
 def get_redis_client():
     """Tạo Redis client - sử dụng Redis client thông thường, sẽ xử lý cluster mode khi gặp MovedError"""
