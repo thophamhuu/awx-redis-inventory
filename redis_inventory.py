@@ -14,9 +14,13 @@ def get_redis_client():
     
     # Thử sử dụng Redis Cluster client trước
     try:
-        from redis.cluster import RedisCluster
-        startup_nodes = [{"host": host, "port": port}]
-        r = RedisCluster(startup_nodes=startup_nodes, decode_responses=True, socket_connect_timeout=5, skip_full_coverage_check=True)
+        from redis.cluster import RedisCluster, ClusterNode
+        # Chỉ dùng node đầu tiên, RedisCluster sẽ tự động discover các nodes khác
+        startup_nodes = [
+            ClusterNode(host, port),
+        ]
+        r = RedisCluster(startup_nodes=startup_nodes, decode_responses=True, 
+                        socket_connect_timeout=10, skip_full_coverage_check=True)
         # Test connection
         r.ping()
         return r
