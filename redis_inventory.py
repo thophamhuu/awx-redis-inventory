@@ -38,12 +38,15 @@ def main():
             hosts = r.smembers("ansible:hosts") or []
         except redis.exceptions.MovedError as e:
             # Xử lý MovedError - key được chuyển đến node khác trong cluster
-            # Thử lại với Redis Cluster client
+            # Thử lại với Redis Cluster client (dùng ClusterNode giống get_redis_client)
             print(f"Redis MovedError detected: {e}. Retrying with cluster client...", file=sys.stderr)
             try:
-                from redis.cluster import RedisCluster
-                startup_nodes = [{"host": "172.17.196.126", "port": 6379}]
-                r = RedisCluster(startup_nodes=startup_nodes, decode_responses=True, socket_connect_timeout=5, skip_full_coverage_check=True)
+                from redis.cluster import RedisCluster, ClusterNode
+                startup_nodes = [
+                    ClusterNode("172.17.196.126", 6379),
+                ]
+                r = RedisCluster(startup_nodes=startup_nodes, decode_responses=True,
+                                 socket_connect_timeout=10, skip_full_coverage_check=True)
                 hosts = r.smembers("ansible:hosts") or []
             except Exception as cluster_error:
                 # Nếu vẫn lỗi, trả về inventory rỗng (không có _error group)
